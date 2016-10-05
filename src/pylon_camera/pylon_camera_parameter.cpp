@@ -28,6 +28,7 @@
  *****************************************************************************/
 
 #include <pylon_camera/pylon_camera_parameter.h>
+#include <sensor_msgs/image_encodings.h>
 
 namespace pylon_camera
 {
@@ -37,7 +38,7 @@ PylonCameraParameter::PylonCameraParameter() :
         device_user_id_(""),
         frame_rate_(5.0),
         camera_info_url_(""),
-        image_encoding_("mono8"),
+        image_encoding_(sensor_msgs::image_encodings::MONO8),
         binning_x_(1),
         binning_y_(1),
         binning_x_given_(false),
@@ -82,8 +83,6 @@ void PylonCameraParameter::readFromRosParameterServer(const ros::NodeHandle& nh)
         nh.getParam("camera_info_url", camera_info_url_);
     }
 
-    nh.param<std::string>("image_encoding", image_encoding_, "mono8");
-
     binning_x_given_ = nh.hasParam("binning_x");
     if ( binning_x_given_ )
     {
@@ -119,6 +118,23 @@ void PylonCameraParameter::readFromRosParameterServer(const ros::NodeHandle& nh)
         {
             binning_y_ = static_cast<size_t>(binning_y);
         }
+    }
+
+    if ( nh.hasParam("image_encoding") )
+    {
+        std::string encoding;
+        nh.getParam("image_encoding", encoding);
+        if ( !sensor_msgs::image_encodings::isMono(encoding) &&
+             !sensor_msgs::image_encodings::isColor(encoding) &&
+             !sensor_msgs::image_encodings::isBayer(encoding) &&
+             encoding != sensor_msgs::image_encodings::YUV422 )
+        {
+            ROS_WARN_STREAM("Desired image encoding parameter: '" << encoding
+                << "' is not part of the 'sensor_msgs/image_encodings.h' list!"
+                << " Will reset it to default value ('mono8')");
+            encoding = sensor_msgs::image_encodings::MONO8;
+        }
+        image_encoding_ = encoding;
     }
 
     // ##########################
@@ -288,7 +304,7 @@ std::string PylonCameraParameter::shutterModeString() const
     }
 }
 
-std::string PylonCameraParameter::imageEncoding() const
+const std::string& PylonCameraParameter::imageEncoding() const
 {
     return image_encoding_;
 }
