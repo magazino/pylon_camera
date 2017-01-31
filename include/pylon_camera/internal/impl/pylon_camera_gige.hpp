@@ -113,7 +113,7 @@ bool PylonGigECamera::applyCamSpecificStartupSettings(const PylonCameraParameter
         ROS_INFO_STREAM("Cam has gain range: ["
                 << cam_->GainRaw.GetMin() << " - "
                 << cam_->GainRaw.GetMax()
-                << "] measured in decive specific units.");
+                << "] measured in device specific units.");
 
         ROS_INFO_STREAM("Cam has gammma range: ["
                 << cam_->Gamma.GetMin() << " - "
