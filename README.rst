@@ -1,11 +1,14 @@
 ====
+**New Official Version of Driver available**
+====
+The new official driver (an extended version of this package with some bug-fixes and new functionality) is available at https://github.com/basler/pylon-ros-camera. 
+
+
+====
 **ROS-Driver for Basler Cameras**
 ====
 **developed by Magazino GmbH, using the pylon Software Camera Suite by Basler AG**
 
-.. image:: https://raw.githubusercontent.com/magazino/pylon_camera/indigo-devel/wiki_imgs/logos.png
-   :width: 130 %
-   :align: center
 
 This package offers many functions of the Basler pylon API inside the ROS-Framwork.
 
